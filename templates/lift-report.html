@@ -1,0 +1,19 @@
+<td colspan="5">
+	<div class="row" id="lift-report-details">
+		<div class="col-md-4" id="raw-data">
+			<button class="btn btn-success export-data">Export data</button>
+			<ul class="list-unstyled list-group" style="margin-top:5px;">
+				<li class="list-group-item"><b>Tags:</b>
+					<div id="tag-list">
+						<% _.each(model.get("tags"), function(tag){ %>
+							<a id="tag-<%= tag %>-event-<%= model.get("event_id") %>">#<%= tag %></a>
+						<% }); %>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="col-md-8" id="graph-data-view">
+			<div id="lift-chart-<%=model.get("event_id")%>"></div>
+		</div>
+	</div>
+</td>

@@ -1,0 +1,49 @@
+{
+    "outreach_events": [
+        {
+            "event_id": "1",
+            "user_id": "4641204",
+            "timestamp": "1400544000",
+            "track_period": "25",
+            "tags": [
+                "501shorts",
+                "levisskateboardingcollection",
+                "levisskateboarding"
+            ]
+        },
+        {
+            "event_id": "2",
+            "user_id": "13460080",
+            "timestamp": "1400544000",
+            "track_period": "25",
+            "tags": [
+                "teamadidas",
+                "justdoit"
+            ]
+        },
+        {
+            "event_id": "3",
+            "user_id": "602725764",
+            "timestamp": "1400544000",
+            "track_period": "25",
+            "tags": [
+                "play",
+                "zarapictures",
+                "newthisweek",
+                "zarasummer"
+            ]
+        },
+        {
+            "event_id": "4",
+            "user_id": "20277715",
+            "timestamp": "1400544000",
+            "track_period": "25",
+            "tags": [
+                "fathersday",
+                "rg14",
+                "regram",
+                "lacoste"
+            ]
+        }       
+    ]
+}

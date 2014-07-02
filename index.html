@@ -1,11 +1,50 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Brand Lift Report - Chute</title>
-    <link rel="stylesheet" type="text/css" href="css/bootstrap/css/bootstrap.min.css">
 
-</head>
-<body>
-    <script data-main="js/main" src="js/libs/require.js"></script>
-</body>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Brand Lift Dashboard</title>
+    <link href="css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap/css/dashboard.css" rel="stylesheet">
+    <link href="css/c3.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><img src="/imgs/logo.png">   Brand Lift</a>
+        </div>
+        <div class="navbar-collapse collapse">
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+
+        <div class="col-sm-3 col-md-2 sidebar" id="sidebar">
+        	<div id="user-profile-panel"></div>
+        	<div id="input-output-panel"></div>
+        </div>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="dashboard">
+        </div>
+
+      </div>
+    </div>
+
+    <script data-main="js/main" type="text/javascript" src="js/libs/require.js"></script>
+  </body>
 </html>
