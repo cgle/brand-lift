@@ -64,6 +64,7 @@ define(['jquery','underscore','backbone','d3','c3','bootstrap','dateformat','mod
 					that.tagcount[l.get("tag_name")]["after_count"] = after_count;
 					data[l.get("tag_name")] = count;
 				});
+				that.$('#tag-list-event-'+that.model.get("event_id")).html("");
 				_.each(that.tagcount,function(count,tag){
 					var beforeDiv = "<p><b>Before count:</b> "+count["before_count"]+"</p>";
 					var afterDiv = "<p><b>After count:</b> "+count["after_count"]+"</p>";

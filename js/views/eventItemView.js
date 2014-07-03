@@ -42,6 +42,7 @@ define(['jquery','underscore','backbone','text!templates/event-item.html','model
 					success: function(user){
 						that.profilepanel = new sidebarProfileView({model:user});
 						that.profilepanel.render();
+						$("#loading-sidebar-gif").hide();
 						$(".sidebar-"+that.model.get("user_id")).show();
 					}
 				});				
