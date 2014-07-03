@@ -44,6 +44,16 @@
                 "regram",
                 "lacoste"
             ]
+        },
+                {
+            "event_id": "5",
+            "user_id": "35154760",
+            "timestamp": "1369859802",
+            "track_period": "20",
+            "tags": [
+                "sipface",
+                "starbucks"
+            ]
         }       
     ]
 }
