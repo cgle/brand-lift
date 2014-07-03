@@ -4,8 +4,9 @@ define(['jquery','underscore','backbone','text!templates/event-item.html','model
 			tagName: 'tr',
 			events: {'click .showLift': 'showLift'},
 			initialize: function(){
-				this.initialReportLoad = false,
-				this.loadLift = true;
+				this.initialReportLoad = false;
+				this.reportLoaded = false;
+				this.ProfileLoad = false;
 				this.render();
 			},
 			render: function(){
@@ -15,20 +16,21 @@ define(['jquery','underscore','backbone','text!templates/event-item.html','model
 			},
 			showLift: function(e){
 				var that = this;
-
 				//bug not fixed: if hide current lift then open new lift 
 				//profile panel not load
 
-				var checkProfilePanelClass = $("#user-profile-panel").hasClass(this.model.get("user_id"));
-				if (!checkProfilePanelClass) {that.fetchUserProfile();}
+				var checkSameProfilePanel = $("#user-profile-panel").hasClass("sidebar-"+this.model.get("user_id"));
+
+				if (!checkSameProfilePanel && !that.reportLoaded) {that.fetchUserProfile(); that.ProfileLoad = true;}
 				else 
-					if (checkProfilePanelClass && that.loadLift) {that.profilepanel.toggle();that.loadLift = false;}
-				else {that.profilepanel.toggle();that.loadLift = true;}
-				
-				if (!that.initialReportLoad){that.fetchLiftReport();that.initialReportLoad = true;that.reportLoaded = true;}
+					if (checkSameProfilePanel && !that.ProfileLoad && !that.reportLoaded) {$(".sidebar-"+that.model.get("user_id")).show(); that.ProfileLoad = true;}
+				else {$(".sidebar-"+that.model.get("user_id")).hide();that.ProfileLoad = false;}
+
+				if (!that.initialReportLoad){that.fetchLiftReport(); that.initialReportLoad = true;that.reportLoaded = true;}
 				else 
-					if (!that.reportLoaded) {that.lift.show(); that.profilepanel.show(); that.loadLift = false; that.reportLoaded = true;}
-				else {that.lift.hide(); that.profilepanel.hide(); that.loadLift = true; that.reportLoaded = false;}
+					if (!that.reportLoaded) {that.lift.show(); that.reportLoaded = true;}
+				else {that.lift.hide(); that.reportLoaded = false;}
+			
 
 
 			},
@@ -40,7 +42,7 @@ define(['jquery','underscore','backbone','text!templates/event-item.html','model
 					success: function(user){
 						that.profilepanel = new sidebarProfileView({model:user});
 						that.profilepanel.render();
-
+						$(".sidebar-"+that.model.get("user_id")).show();
 					}
 				});				
 			},

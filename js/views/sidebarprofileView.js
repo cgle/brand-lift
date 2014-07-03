@@ -5,7 +5,7 @@ define(['jquery','underscore','backbone','text!templates/sidebar-profilepanel.ht
 			el: $("#user-profile-panel"),
 			class: function(){return this.model.get("id")},
 			initialize: function(){
-				this.$el.attr("class",this.model.get("id"));
+				this.$el.attr("class","sidebar-"+this.model.get("id"));
 				this.render();
 			},
 			render: function(){
