@@ -15,6 +15,10 @@ define(['jquery','underscore','backbone','text!templates/event-item.html','model
 			},
 			showLift: function(e){
 				var that = this;
+
+				//bug not fixed: if hide current lift then open new lift 
+				//profile panel not load
+
 				var checkProfilePanelClass = $("#user-profile-panel").hasClass(this.model.get("user_id"));
 				if (!checkProfilePanelClass) {that.fetchUserProfile();}
 				else 
@@ -36,6 +40,7 @@ define(['jquery','underscore','backbone','text!templates/event-item.html','model
 					success: function(user){
 						that.profilepanel = new sidebarProfileView({model:user});
 						that.profilepanel.render();
+
 					}
 				});				
 			},

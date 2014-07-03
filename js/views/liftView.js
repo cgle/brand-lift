@@ -1,17 +1,18 @@
-define(['jquery','underscore','backbone','d3','c3','dateformat','models/lift-data','models/medialist','text!templates/lift-report.html'],
-	function($,_,Backbone,d3,c3,dateformat,Lift,MediaList,liftTemplate){
+define(['jquery','underscore','backbone','d3','c3','bootstrap','dateformat','models/lift-data','models/medialist','text!templates/lift-report.html'],
+	function($,_,Backbone,d3,c3,bootstrap,dateformat,Lift,MediaList,liftTemplate){
 		var liftView = Backbone.View.extend({
 			tagName: "div",
 			medialist: [],
 			events: {"click .export-data": "exportData"},
 			initialize: function(){
-				this.fetchMediaList("");
+				this.requestDate = (new Date(parseInt(this.model.get("timestamp"))*1000)).format("yyyy-mm-dd");
 				this.render();
+				this.fetchMediaList("");
 				this.delegateEvents();				
 			},
 			
 			render: function(){
-				var compiledtemplate = _.template(liftTemplate,{model:this.model,_:_});
+				var compiledtemplate = _.template(liftTemplate,{model:this.model,_:_,requestDate:this.requestDate});
 				this.setElement(compiledtemplate);
 				return this;
 			},
@@ -37,19 +38,41 @@ define(['jquery','underscore','backbone','d3','c3','dateformat','models/lift-dat
 			
 			analyze: function(mlist){
 				this.setupLifts(mlist);
-				this.graphLift(this.handleLift(this.lifts));
+				var graphlift = this.handleLift(this.lifts); 
+				this.graphLift(graphlift);
 			},
 
 			handleLift: function(lifts){
 				var data = {};
+				var that = this;
+				that.tagcount = {};
 				_.each(lifts,function(l){
 					var count = {};
+					that.tagcount[l.get("tag_name")]={};
+					var total_count = 0;
+					var before_count = 0;
+					var after_count = 0;
 					_.each(l.get("normalized_time"),function(t){
 						var dt = new Date(parseInt(t)*1000);
 						dt = dt.format("yyyy-mm-dd");
 						if (!count[dt]) {count[dt]=1;} else {count[dt]++}
+						total_count++;
+						if (t<=that.model.get("timestamp")){before_count++}else{after_count++}
 					});
+					that.tagcount[l.get("tag_name")]["total_count"] = total_count;
+					that.tagcount[l.get("tag_name")]["before_count"] = before_count;
+					that.tagcount[l.get("tag_name")]["after_count"] = after_count;
 					data[l.get("tag_name")] = count;
+				});
+				_.each(that.tagcount,function(count,tag){
+					var beforeDiv = "<p><b>Before count:</b> "+count["before_count"]+"</p>";
+					var afterDiv = "<p><b>After count:</b> "+count["after_count"]+"</p>";
+					var id = tag + "-event-" + that.model.get("event_id");
+					var tagDiv = "<a rel='popover' data-toggle='popover' data-placement='bottom' \
+					data-content='"+ beforeDiv + afterDiv + "' id='" + id + "'>#" 
+					+ tag + "(" + count["total_count"] + ")</a> ";
+					that.$('#tag-list-event-'+that.model.get("event_id")).append(tagDiv);
+					that.$("#"+id).popover({html:true});
 				});
 				return data;
 			},
@@ -90,7 +113,12 @@ define(['jquery','underscore','backbone','d3','c3','dateformat','models/lift-dat
 				            type: 'timeseries',
 				            format: '%Y-%m-%d'
 				        },
-				    }				    
+				    },
+				    grid: {
+				        x: {
+				            lines: [{value: this.requestDate, text: 'Right request'}]
+				        }
+				    }				    				    
 				});
 			},
 
