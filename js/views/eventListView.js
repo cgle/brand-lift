@@ -1,10 +1,13 @@
-define(['jquery','underscore','backbone','text!templates/event-list.html','models/outreach-events','views/eventItemView'],
-	function($,_,Backbone,eventListTemplate,OutreachEvents,eventItemView){
+define(['jquery','underscore','backbone','bootstrap','text!templates/event-list.html','models/outreach-events','views/eventItemView','views/queryModalView'],
+	function($,_,Backbone,bootstrap,eventListTemplate,OutreachEvents,eventItemView,queryModalView){
 		var eventListView = Backbone.View.extend({
 		el: $("#dashboard"),
 		initialize: function(){
 			this.$el.html(_.template(eventListTemplate));
-			this.outreachevents = new OutreachEvents();
+			this.event_bus = _({}).extend(Backbone.Events);
+			var queryModal = new queryModalView({event_bus:this.event_bus});
+			queryModal.render();
+			this.outreachevents = new OutreachEvents.collection();
 		},
 		render: function(){
 			var that = this;
@@ -14,9 +17,16 @@ define(['jquery','underscore','backbone','text!templates/event-list.html','model
 						var newItem = new eventItemView({model:oe});
 						that.$("#event-list").append(newItem.$el);
 					});
+					that.listenTo(that.event_bus,'QueryLift',function(ev){
+						e.add(ev);
+						console.log(ev);
+						var newItem = new eventItemView({model:ev});
+						that.$("#event-list").append(newItem.$el);
+					});
 				}
 			});
 		}
+
 		});
 		return eventListView;
 
