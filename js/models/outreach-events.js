@@ -18,5 +18,5 @@ define(['jquery','underscore','backbone'],
 			}
 		});
 
-		return OutreachEvents;
+		return {model:OutreachEvent,collection:OutreachEvents};
 	});
