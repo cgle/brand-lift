@@ -19,7 +19,6 @@ define(['jquery','underscore','backbone','bootstrap','text!templates/event-list.
 					});
 					that.listenTo(that.event_bus,'QueryLift',function(ev){
 						e.add(ev);
-						console.log(ev);
 						var newItem = new eventItemView({model:ev});
 						that.$("#event-list").append(newItem.$el);
 					});

@@ -4,6 +4,7 @@ define(['jquery','underscore','backbone','d3','c3','bootstrap','dateformat','mod
 			tagName: "div",
 			medialist: [],
 			events: {"click .export-data": "exportData"},
+			exportable: false,
 			initialize: function(){
 				this.requestDate = (new Date(parseInt(this.model.get("timestamp"))*1000)).format("yyyy-mm-dd");
 				this.render();
@@ -128,21 +129,24 @@ define(['jquery','underscore','backbone','d3','c3','bootstrap','dateformat','mod
 				var lifts = new Lift.collection();
 				_.each(mlist,function(media){
 					var tags = media.get("tags");
-					var timestamp = that.parseDate(media.get("created_time"));
+					var timestamp = that.parseDate(media.get("created_time")); //normalize timestamp - ignoring time, set to 00:00:00
 					_.each(tags, function(tag){
 						if (_.contains(that.model.get("tags"),tag)){
 							if (lifts.where({"tag_name":tag.toLowerCase()}).length==0){
-								var newlift = new Lift.model({"tag_name":tag.toLowerCase(),"raw_time":[media.get("created_time")],"normalized_time":[timestamp]});
+								var newlift = new Lift.model({"tag_name":tag.toLowerCase(),"raw_time":[media.get("created_time")],"normalized_time":[timestamp],'link':[media.get("link")],'id':[media.get("id")]});
 								lifts.add([newlift]);
 							}
 							else {
 								var l = lifts.findWhere({"tag_name":tag.toLowerCase()});
 								l.set("raw_time",l.get("raw_time").concat([media.get("created_time")]));
 								l.set("normalized_time",l.get("normalized_time").concat([timestamp]));
+								l.set("link",l.get("link").concat([media.get("link")]));
+								l.set("id",l.get("id").concat([media.get("id")]));
 							}
 						}
 					});
 				});
+				that.exportable = true;
 				that.lifts = lifts.models;
 			},
 
@@ -153,7 +157,18 @@ define(['jquery','underscore','backbone','d3','c3','bootstrap','dateformat','mod
 			},
 
 			exportData: function(){
-				//pending
+				if (this.exportable){
+					var csvrows = [['tag name','media id','link','created time','normalized time']];
+					_.each(this.lifts,function(l){
+						for (i=0; i<l.get("id").length;i++){
+							csvrows.push([l.get("tag_name"),l.get("id")[i],l.get("link")[i],l.get("raw_time")[i],l.get("normalized_time")[i]]);			
+						}
+					})
+					var csvstring = csvrows.join("\n");
+					//need fix file extension .csv
+					var uri = 'data:application/csv;charset=UTF-8,' + encodeURIComponent(csvstring);
+					window.open(uri);
+				}
 			},
 			hide: function(){
 				this.$el.hide();

@@ -14,7 +14,7 @@ define(['jquery','underscore','backbone'],
 			url: "",
 			max_id: "",
 			initialize: function(attr,opts){
-				this.url = "https://api.instagram.com/v1/users/"+opts.user_id+"/media/recent/?client_id=0382af18a00c451887df58d3a4c7b8a0&min_timestamp="+opts.min_timestamp+"&max_timestamp="+opts.max_timestamp+"&max_id="+opts.max_id
+				this.url = "https://api.instagram.com/v1/users/"+opts.user_id+"/media/recent/?access_token=53175277.5b9e1e6.7b2ae2df2569404580f4b628c6851ddc&min_timestamp="+opts.min_timestamp+"&max_timestamp="+opts.max_timestamp+"&max_id="+opts.max_id
 			},
 			parse: function(res){
 				var that = this;

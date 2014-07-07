@@ -7,6 +7,11 @@ define(['jquery','underscore','backbone'],
 				"timestamp": "",
 				"track_period": "",
 				"tags": []
+			},
+			validate: function(attrs){
+				if (attrs.event_id == "" || attrs.user_id == "" || attrs.timestamp == "" || attrs.track_period == "" || attrs.tags == []){
+					return "Need input data for query";
+				}
 			}
 		});
 
