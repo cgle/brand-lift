@@ -3,7 +3,6 @@ define(['jquery','underscore','backbone','text!templates/sidebar-profilepanel.ht
 		var sidebarprofileView = Backbone.View.extend({
 			tagName: 'ul',
 			el: $("#user-profile-panel"),
-			class: function(){return this.model.get("id")},
 			initialize: function(){
 				this.$el.attr("class","sidebar-"+this.model.get("id"));
 				this.render();
@@ -18,9 +17,6 @@ define(['jquery','underscore','backbone','text!templates/sidebar-profilepanel.ht
 			},
 			hide: function(){
 				this.$el.hide();
-			},
-			toggle: function(){
-				this.$el.toggle();
 			}
 
 		});

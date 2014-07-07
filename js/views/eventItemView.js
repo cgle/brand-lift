@@ -2,7 +2,9 @@ define(['jquery','underscore','backbone','text!templates/event-item.html','model
 	function($,_,Backbone,eventItemTemplate,User,liftView, sidebarProfileView){
 		var eventItemView = Backbone.View.extend({
 			tagName: 'tr',
-			events: {'click .showLift': 'showLift'},
+			events: {
+				'click .showLift': 'showLift'
+			},
 			initialize: function(){
 				this.initialReportLoad = false;
 				this.reportLoaded = false;
@@ -19,19 +21,35 @@ define(['jquery','underscore','backbone','text!templates/event-item.html','model
 				//bug not fixed: if hide current lift then open new lift 
 				//profile panel not load
 
-				var checkSameProfilePanel = $("#user-profile-panel").hasClass("sidebar-"+this.model.get("user_id"));
-				if (!checkSameProfilePanel && !that.reportLoaded) {that.fetchUserProfile(); that.ProfileLoad = true;}
-				else 
-					if (checkSameProfilePanel && !that.ProfileLoad && !that.reportLoaded) {$(".sidebar-"+that.model.get("user_id")).show(); that.ProfileLoad = true;}
-				else {$(".sidebar-"+that.model.get("user_id")).hide();that.ProfileLoad = false;}
+				var checkSameProfilePanel = $("#user-profile-panel").hasClass("sidebar-" + this.model.get("user_id"));
+				if (!checkSameProfilePanel && !that.reportLoaded) {
+					that.fetchUserProfile(); 
+					that.ProfileLoad = true;
+				} else if (checkSameProfilePanel && !that.ProfileLoad && !that.reportLoaded) {
+					$(".sidebar-"+that.model.get("user_id")).show();
+					that.ProfileLoad = true;
+				} else {
+					$(".sidebar-"+that.model.get("user_id")).hide();
+					that.ProfileLoad = false;
+				}
 
-				if (!that.initialReportLoad){that.fetchLiftReport(); that.initialReportLoad = true;that.reportLoaded = true;}
-				else 
-					if (!that.reportLoaded) {that.lift.show(); that.reportLoaded = true;}
-				else {that.lift.hide(); that.reportLoaded = false;}
+				if (!that.initialReportLoad) {
+					that.fetchLiftReport();
+					that.initialReportLoad = true;
+					that.reportLoaded = true;
+				} else if (!that.reportLoaded) {
+					that.lift.show();
+					that.reportLoaded = true;
+				} else {
+					that.lift.hide();
+					that.reportLoaded = false;
+				}
 			
-				if (that.reportLoaded) {$("#liftshow-event-"+that.model.get("event_id")).text('Hide Lift')}
-				else {$("#liftshow-event-"+that.model.get("event_id")).text('Show Lift')}
+				if (that.reportLoaded) {
+					$("#liftshow-event-"+that.model.get("event_id")).text('Hide Lift')
+				} else {
+					$("#liftshow-event-"+that.model.get("event_id")).text('Show Lift')
+				}
 
 			},
 			fetchUserProfile: function(){
@@ -50,7 +68,7 @@ define(['jquery','underscore','backbone','text!templates/event-item.html','model
 			fetchLiftReport: function(){
 				var that = this;
 				that.lift = new liftView({model:this.model});
-				$("#lift-event-"+that.model.get("event_id")).html(that.lift.$el);
+				$("#lift-event-" + that.model.get("event_id")).html(that.lift.$el);
 			}
 		});
 

@@ -3,7 +3,9 @@ define(['jquery','underscore','backbone','d3','c3','bootstrap','dateformat','mod
 		var liftView = Backbone.View.extend({
 			tagName: "div",
 			medialist: [],
-			events: {"click .export-data": "exportData"},
+			events: {
+				"click .export-data": "exportData"
+			},
 			exportable: false,
 			initialize: function(){
 				this.requestDate = (new Date(parseInt(this.model.get("timestamp"))*1000)).format("yyyy-mm-dd");
@@ -28,11 +30,11 @@ define(['jquery','underscore','backbone','d3','c3','bootstrap','dateformat','mod
 					dataType: 'jsonp', 
 					success: function(media){
 						that.medialist = that.medialist.concat(media.models);
-						if (m.max_id) {that.fetchMediaList(m.max_id)}
-						else 
-							{
-								that.analyze(that.medialist);
-							}
+						if (m.max_id) {
+							that.fetchMediaList(m.max_id)
+						} else {
+							that.analyze(that.medialist);
+						}
 					}
 				});
 			},
@@ -53,13 +55,23 @@ define(['jquery','underscore','backbone','d3','c3','bootstrap','dateformat','mod
 					var total_count = 0;
 					var before_count = 0;
 					var after_count = 0;
+					
 					_.each(l.get("normalized_time"),function(t){
 						var dt = new Date(parseInt(t)*1000);
 						dt = dt.format("yyyy-mm-dd");
-						if (!count[dt]) {count[dt]=1;} else {count[dt]++}
+						if (!count[dt]) {
+							count[dt]=1;
+						} else {
+							count[dt]++;
+						}
 						total_count++;
-						if (t<=that.model.get("timestamp")){before_count++}else{after_count++}
+						if (t<=that.model.get("timestamp")) {
+							before_count++;
+						} else {
+							after_count++;
+						}
 					});
+
 					that.tagcount[l.get("tag_name")]["total_count"] = total_count;
 					that.tagcount[l.get("tag_name")]["before_count"] = before_count;
 					that.tagcount[l.get("tag_name")]["after_count"] = after_count;
@@ -67,11 +79,11 @@ define(['jquery','underscore','backbone','d3','c3','bootstrap','dateformat','mod
 				});
 				that.$('#tag-list-event-'+that.model.get("event_id")).html("");
 				_.each(that.tagcount,function(count,tag){
-					var beforeDiv = "<p><b>Before count:</b> "+count["before_count"]+"</p>";
-					var afterDiv = "<p><b>After count:</b> "+count["after_count"]+"</p>";
+					var beforeDiv = "<p><b>Before count:</b> " + count["before_count"]+"</p>";
+					var afterDiv = "<p><b>After count:</b> " + count["after_count"]+"</p>";
 					var id = tag + "-event-" + that.model.get("event_id");
 					var tagDiv = "<a rel='popover' data-toggle='popover' data-placement='bottom' \
-					data-content='"+ beforeDiv + afterDiv + "' id='" + id + "'>#" 
+					data-content='" + beforeDiv + afterDiv + "' id='" + id + "'>#" 
 					+ tag + "(" + count["total_count"] + ")</a> ";
 					that.$('#tag-list-event-'+that.model.get("event_id")).append(tagDiv);
 					that.$("#"+id).popover({html:true});
@@ -131,13 +143,18 @@ define(['jquery','underscore','backbone','d3','c3','bootstrap','dateformat','mod
 					var tags = media.get("tags");
 					var timestamp = that.parseDate(media.get("created_time")); //normalize timestamp - ignoring time, set to 00:00:00
 					_.each(tags, function(tag){
-						if (_.contains(that.model.get("tags"),tag)){
-							if (lifts.where({"tag_name":tag.toLowerCase()}).length==0){
-								var newlift = new Lift.model({"tag_name":tag.toLowerCase(),"raw_time":[media.get("created_time")],"normalized_time":[timestamp],'link':[media.get("link")],'id':[media.get("id")]});
+						if (_.contains(that.model.get("tags"),tag)) {
+							if (lifts.where({"tag_name":tag.toLowerCase()}).length==0) {
+								var newlift = new Lift.model({
+									"tag_name": tag.toLowerCase(),
+									"raw_time":[media.get("created_time")],
+									"normalized_time":[timestamp],
+									"link":[media.get("link")],
+									"id":[media.get("id")]
+								});
 								lifts.add([newlift]);
-							}
-							else {
-								var l = lifts.findWhere({"tag_name":tag.toLowerCase()});
+							} else {
+								var l = lifts.findWhere({"tag_name": tag.toLowerCase()});
 								l.set("raw_time",l.get("raw_time").concat([media.get("created_time")]));
 								l.set("normalized_time",l.get("normalized_time").concat([timestamp]));
 								l.set("link",l.get("link").concat([media.get("link")]));
@@ -160,7 +177,7 @@ define(['jquery','underscore','backbone','d3','c3','bootstrap','dateformat','mod
 				if (this.exportable){
 					var csvrows = [['tag name','media id','link','created time','normalized time']];
 					_.each(this.lifts,function(l){
-						for (i=0; i<l.get("id").length;i++){
+						for (i=0; i<l.get("id").length;i++) {
 							csvrows.push([l.get("tag_name"),l.get("id")[i],l.get("link")[i],l.get("raw_time")[i],l.get("normalized_time")[i]]);			
 						}
 					})
