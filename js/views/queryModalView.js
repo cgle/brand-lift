@@ -24,22 +24,18 @@ define(['jquery','underscore','backbone','text!templates/query-lift-modal.html',
 			submitQuery: function(){
 				var that = this;
 				var query = {
-					event_id: this.$("input#queryeventid").val(),
-					username: this.$("input#queryusername").val(),
-					user_id: this.$("input#queryuserid").val(),
-					timestamp: this.$("input#querytimestamp").val(),
+					max_id: "999999",
+					album_id: this.$("input#queryalbumid").val(),
 					track_period: this.$("input#querytrackperiod").val(),
-					tags: (this.$("input#querytags").val()).toLowerCase().split(/[ ,]+/)			
+					taglist: (this.$("input#querytags").val()).toLowerCase().split(/[ ,]+/)			
 				}
-
-				var newEvent = new OutreachEvents.model(query,{validate:true});
-				if (!newEvent.validationError) {
-					that.options.event_bus.trigger('QueryLift',newEvent);
-					that.render();
-					$("#query-input").modal('hide');					
-				} else {
-					that.$("#form-error").html(newEvent.validationError);
+				console.log(query);
+				if (query.album_id == "" || query.track_period == "" || query.taglist.length == 0) {
+					that.$("#form-error").html("Please fill up the query");
 					that.$("#form-error").show();					
+				} else {
+					that.closeModal();
+					that.options.event_bus.trigger('QueryLift',query);						
 				}
 			},
 

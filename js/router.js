@@ -11,7 +11,6 @@ define(['jquery','underscore','backbone','views/eventListView'],
 			var app_router = new AppRouter();
 			app_router.on("route:defaultAction", function(actions){
 				var dashboard = new eventListView();
-				dashboard.render();
 			});
 
 			Backbone.history.start();

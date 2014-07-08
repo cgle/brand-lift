@@ -1,11 +1,12 @@
-<tr id="outreach-event-<%= e.get('event_id') %>">
-	<td><%= e.get('event_id') %></td>
+<tr class="<%= e.get("username") %>-<%= e.get("provider")%>" id="outreach-event-<%= e.get("username") %>-<%= e.get("provider")%>">
+	<td><%= e.get('album_id') %></td>
 	<td><%= e.get('username')%></td>
 	<td><%= e.get('user_id') %></td>
 	<td><%= e.get('track_period') %></td>
 	<td><%= e.get('timestamp') %></td>
+	<td><%= e.get('provider') %></td>
 	<td>
-		<button class="btn btn-primary showLift" id="liftshow-event-<%= e.get("event_id") %>">Show Lift</button>
+		<button class="btn btn-primary showLift" id="liftshow-user-<%= e.get("username") %>-<%= e.get("provider")%>">Show Lift</button>
 	</td>
 </tr>
-<tr id="lift-event-<%= e.get('event_id') %>"></tr>
+<tr class="<%= e.get("username") %>-<%= e.get("provider")%>" id="lift-event-<%= e.get("username") %>-<%= e.get("provider")%>"></tr>
