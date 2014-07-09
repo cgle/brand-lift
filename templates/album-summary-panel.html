@@ -1,0 +1,12 @@
+<ul class="list-unstyled list-group" id="summary-panel-<%= model.album_id %>">
+	<li class="list-group-item"><b>Album:</b> <%= model.album_id %></li>
+	<li class="list-group-item"><b>Total assets:</b> <%= model.total_assets %></li>
+	<li class="list-group-item"><b>Total users:</b> <%= model.total_users %></li>
+	<li class="list-group-item"><b>Total instagram users:</b> <%= model.instagram %></li>
+	<li class="list-group-item"><b>Total twitter users:</b> <%= model.twitter %></li>
+	<li class="list-group-item"><b>Tags:</b> 
+		<% _.each(model.tags, function(t){ %>
+			#<%= t %> 
+		<%}); %>
+	</li>	
+</ul>

@@ -1,0 +1,42 @@
+<table class="table table-bordered">
+<thead>
+	<tr>
+		<td>Tag</td>
+		<td>Before</td>
+		<td>After</td>
+		<td>Total</td>
+		<td>Change (%)</td>
+	</tr>
+</thead>
+<tbody>
+	<%
+	var before = 0;
+	var after = 0;
+	var total = 0; 
+	_.each(tagcount, function(count,tag){
+	  before = before + count['before'];
+	  after = after + count['after'];
+	  total = total + count['total']; 
+		var change = (count['after']/count['before']-1).toFixed(1);
+		var color = '#5cb85c';
+		if (change < 0) {color = '#d9534f';} 
+		%>
+	<tr>
+		<td><%= tag %></td>
+		<td><%= count['before'] %></td>
+		<td><%= count['after'] %></td>
+		<td><%= count['total'] %></td>
+		<td style="color:<%= color %>"><%= change*100 %>%</td>
+	</tr>
+	<% });	
+		var total_change = (after/before - 1).toFixed(1);
+	%>
+	<tr>
+		<td></td>
+		<td><b><%= before %></b></td>
+		<td><b><%= after %></b></td>
+		<td><b><%= total %></b></td>
+		<td style="color:<%= total_change < 0 ? '#d9534f' : '#5cb85c' %>"><b><%= total_change*100 %>%</b></td>
+	</tr>
+</tbody>
+</table>

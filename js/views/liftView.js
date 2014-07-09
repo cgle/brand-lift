@@ -1,5 +1,6 @@
 define(['jquery','underscore','backbone','d3','c3','bootstrap','dateformat','models/lift-data','models/medialist','text!templates/lift-report.html'],
 	function($,_,Backbone,d3,c3,bootstrap,dateformat,Lift,MediaList,liftTemplate){
+		//todo: twitter
 		var liftView = Backbone.View.extend({
 			tagName: "div",
 			medialist: [],
@@ -7,7 +8,8 @@ define(['jquery','underscore','backbone','d3','c3','bootstrap','dateformat','mod
 				"click .export-data": "exportData"
 			},
 			exportable: false,
-			initialize: function(){
+			initialize: function(options){
+				this.options = options || {};				
 				this.requestDate = (new Date(parseInt(this.model.get("timestamp"))*1000)).format("yyyy-mm-dd");
 				this.render();
 				this.fetchMediaList("");
@@ -35,6 +37,7 @@ define(['jquery','underscore','backbone','d3','c3','bootstrap','dateformat','mod
 						} else {
 							that.analyze(that.medialist);
 						}
+
 					}
 				});
 			},
@@ -55,7 +58,6 @@ define(['jquery','underscore','backbone','d3','c3','bootstrap','dateformat','mod
 					var total_count = 0;
 					var before_count = 0;
 					var after_count = 0;
-					
 					_.each(l.get("normalized_time"),function(t){
 						var dt = new Date(parseInt(t)*1000);
 						dt = dt.format("yyyy-mm-dd");
@@ -64,8 +66,11 @@ define(['jquery','underscore','backbone','d3','c3','bootstrap','dateformat','mod
 						} else {
 							count[dt]++;
 						}
+					});
+
+					_.each(l.get("raw_time"),function(t){
 						total_count++;
-						if (t<=that.model.get("timestamp")) {
+						if (t <= that.model.get("timestamp")) {
 							before_count++;
 						} else {
 							after_count++;
@@ -92,9 +97,8 @@ define(['jquery','underscore','backbone','d3','c3','bootstrap','dateformat','mod
 			},
 
 			graphLift: function(data){
-				console.log(data);
 				//data: {"tag_name": {"timestamp1":count_1,"timestamp2":count_2}}
-				var tags = Object.keys(data);
+				var taglist = Object.keys(data);
 				var counts = {};
 				_.each(data,function(v,k){
 					counts[k]=[["timestamp-"+k],[k]];
@@ -103,31 +107,74 @@ define(['jquery','underscore','backbone','d3','c3','bootstrap','dateformat','mod
 						counts[k][0].push(t);
 					});
 				});
-
 				//counts["tag_name"] = [["timestamp",t1,t2],["tag_name",count1,count2]]
+				var summaryData = {};
+				summaryData["username"] = this.model.get("username");
+				summaryData["data"] = data;
+				summaryData["tagcount"] = this.tagcount;
+				//need fix: queue up in the report instead of reloading once hit report
+				if (this.options.event_bus!=undefined){ 
+					this.options.event_bus.trigger('doneIndividualReport',summaryData);
+				}
+
 
 				//initiate inputs for c3 chart
-	    		var xs = {};
-	    		var columns = [];
-	    		_.each(counts, function(v,k){
-	    			xs[k]=v[0][0];
-	    			columns.push(v[0]);
-	    			columns.push(v[1]);
-	    		});
+    		var xs = {};
+    		var columns = [];
+    		var counter = 1;
+    		_.each(counts, function(v,k){
+    			xs[k]=v[0][0];
+    			columns.push(v[0]); //setup timestamp
+    			var newYaxis = [];
+    			_.each(v[1], function(c){
+    				if (c == k) {newYaxis.push(c)} else {newYaxis.push(counter);}
+    			}); 
+    			columns.push(newYaxis); //setup y_axis
+    			counter++;
+    		});
 
 				var chartContainer = '#lift-chart-'+this.model.get("username")+"-"+this.model.get("provider");
 				var chart = c3.generate({
 				    bindto: chartContainer,
+				    size: {
+				        height: 267,
+				        width: 717
+				    },				    
 				    data: {
 				    	xs: xs,
 				    	columns: columns,
-
+				    	type: 'scatter'
 				    },
 				    axis: {
 				        x: {
-				            type: 'timeseries',
-				            format: '%Y-%m-%d'
+				          type: 'timeseries',
+			            format: '%Y-%m-%d'
 				        },
+				        y: {
+				        	min: 0,
+				        	max: counter,
+				        	padding: {top:0, bottom:0},
+				        	tick: {
+				        		count: counter,
+				        		format: function(d) {
+				        			if (d*10%10 != 0) {
+				        				return "";
+				        			} else {
+				        				return taglist[d-1];
+				        			}
+				        		}
+				        	} 
+				        }
+				    },
+				    tooltip: {
+				    	format: {
+					    	title: function(d) {
+					    		return "Number of tags";
+					    	},				    		
+					    	value: function(value, ratio, id, pos){
+					    		return counts[id][1][pos+1];
+					    	}				    		
+				    	}
 				    },
 				    grid: {
 				        x: {

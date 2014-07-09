@@ -1,0 +1,11 @@
+<h2>Summary report for album <%= model.album_id %></h2>
+<button class="btn btn-primary runReport">Run report</button><br>
+<div id="summary-content" style="display:none;">
+	<div id="loading-summary" align="center"><img src="imgs/loader.gif"> Building summary</div>
+	<div id="summary-main">
+		<div class="row">
+			<div class="col-md-6" id="summary-count"></div>
+			<div class="col-md-6" id="summary-stats"></div>
+		</div>
+	</div>
+</div>

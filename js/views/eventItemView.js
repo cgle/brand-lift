@@ -5,10 +5,15 @@ define(['jquery','underscore','backbone','text!templates/event-item.html','model
 			events: {
 				'click .showLift': 'showLift'
 			},
-			initialize: function(){
+			initialize: function(options){
+				this.options = options || {};
+				var that = this;
 				this.initialReportLoad = false;
 				this.reportLoaded = false;
 				this.ProfileLoad = false;
+				this.listenTo(this.options.event_bus,'startReport',function(){
+					this.justFetchReport();
+				});
 				this.render();
 			},
 			render: function(){
@@ -67,8 +72,21 @@ define(['jquery','underscore','backbone','text!templates/event-item.html','model
 			},
 			fetchLiftReport: function(){
 				var that = this;
-				that.lift = new liftView({model:this.model});
+				that.lift = new liftView({
+					model: this.model
+				});
 				$("#lift-event-" + that.model.get("username")+"-"+that.model.get("provider")).html(that.lift.$el);
+			},
+			justFetchReport: function(){
+				var that = this;
+				that.lift = new liftView({
+					model: that.model,
+					event_bus: that.options.event_bus
+				});
+				$("#lift-event-" + that.model.get("username")+"-"+that.model.get("provider")).html(that.lift.$el);
+				that.lift.hide();
+				that.initialReportLoad = true;
+				that.reportLoaded = false;
 			}
 		});
 

@@ -29,6 +29,7 @@ define(['jquery','underscore','backbone'],
 						output.push({
 							album_id: that.album_id,
 							id: r["id"],
+							//handle milliseconds from exposure
 							timestamp: (Math.floor(parseInt(Date.parse(r["created_at"]))/1000)).toString(),
 							user_id: r_asset["uid"],
 							username: r_asset["username"],

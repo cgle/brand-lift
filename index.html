@@ -40,9 +40,21 @@
         	</div>
         	<br>        	
         	<div id="user-profile-panel"></div>
-        </div>
+        	<div id="album-summary-panel">
+						<div id="loading-summary-panel" align="center"><img src="imgs/loader.gif"></div>
+        	</div>
+        </div>     
 
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="dashboard">
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" id="dashboard-container">
+        	<div>
+					<ul class="nav nav-tabs" role="tablist">
+					  <li class="active" id="tab-event-list"><a role="tab" data-toggle="tab">Events list</a></li>
+					  <li id="tab-summary"><a role="tab" data-toggle="tab">Summary report</a></li>
+					</ul>
+        	</div><br>
+        	<div id="dashboard"></div>
+        	<div id="summary-report" style:"display:none;">
+        	</div>
         </div>
 
       </div>
