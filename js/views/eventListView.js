@@ -12,7 +12,8 @@ define(['jquery','underscore','backbone','bootstrap','text!templates/event-list.
 		initialize: function(){
 			var that = this;
 			this.render();
-			this.fetchEvents("999999","2512962","30",["dasaniwater","dasani","dasanisparkling","sparklewithdasani"]);
+			//this.fetchEvents("999999","2512962","30",["dasaniwater","dasani","dasanisparkling","sparklewithdasani"]);
+			this.fetchEvents("999999","2499255","30",["texaspetesauces","texaspete","wsnc","ribs","chaddiction"]);
 			this.event_bus = _({}).extend(Backbone.Events);
 			var queryModal = new queryModalView({event_bus:this.event_bus});
 			queryModal.render();				

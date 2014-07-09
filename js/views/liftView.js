@@ -77,21 +77,22 @@ define(['jquery','underscore','backbone','d3','c3','bootstrap','dateformat','mod
 					that.tagcount[l.get("tag_name")]["after_count"] = after_count;
 					data[l.get("tag_name")] = count;
 				});
-				that.$('#tag-list-event-'+that.model.get("event_id")).html("");
+				that.$('#tag-list-event-'+that.model.get("username")+"-"+that.model.get("provider")).html("");
 				_.each(that.tagcount,function(count,tag){
 					var beforeDiv = "<p><b>Before count:</b> " + count["before_count"]+"</p>";
 					var afterDiv = "<p><b>After count:</b> " + count["after_count"]+"</p>";
-					var id = tag + "-event-" + that.model.get("event_id");
+					var id = tag + "-event-" + that.model.get("username")+"-"+that.model.get("provider");
 					var tagDiv = "<a rel='popover' data-toggle='popover' data-placement='bottom' \
 					data-content='" + beforeDiv + afterDiv + "' id='" + id + "'>#" 
 					+ tag + "(" + count["total_count"] + ")</a> ";
-					that.$('#tag-list-event-'+that.model.get("event_id")).append(tagDiv);
+					that.$('#tag-list-event-'+that.model.get("username")+"-"+that.model.get("provider")).append(tagDiv);
 					that.$("#"+id).popover({html:true});
 				});
 				return data;
 			},
 
 			graphLift: function(data){
+				console.log(data);
 				//data: {"tag_name": {"timestamp1":count_1,"timestamp2":count_2}}
 				var tags = Object.keys(data);
 				var counts = {};
@@ -114,7 +115,7 @@ define(['jquery','underscore','backbone','d3','c3','bootstrap','dateformat','mod
 	    			columns.push(v[1]);
 	    		});
 
-				var chartContainer = '#lift-chart-'+this.model.get("event_id");
+				var chartContainer = '#lift-chart-'+this.model.get("username")+"-"+this.model.get("provider");
 				var chart = c3.generate({
 				    bindto: chartContainer,
 				    data: {

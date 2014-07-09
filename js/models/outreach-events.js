@@ -29,7 +29,7 @@ define(['jquery','underscore','backbone'],
 						output.push({
 							album_id: that.album_id,
 							id: r["id"],
-							timestamp: Date.parse(r["created_at"]),
+							timestamp: (Math.floor(parseInt(Date.parse(r["created_at"]))/1000)).toString(),
 							user_id: r_asset["uid"],
 							username: r_asset["username"],
 							provider: r_asset["provider"],

@@ -4,15 +4,15 @@
 			<button class="btn btn-success export-data">Export data</button>
 			<ul class="list-unstyled list-group" style="margin-top:5px;">
 				<li class="list-group-item"><b>Tags:</b>
-					<div id="tag-list-event-<%=model.get("event_id") %>">
-						<div id="loading-tag-event-<%=model.get("event_id")%>"><img src="imgs/loader.gif" width="35" height="35"></div>
+					<div id="tag-list-event-<%=model.get("username") %>-<%=model.get("provider")%>">
+						<div id="loading-tag-event-<%=model.get("username") %>-<%=model.get("provider")%>"><img src="imgs/loader.gif" width="35" height="35"></div>
 					</div>
 				</li>
 				<li class="list-group-item"><b>Request Date: </b><%= requestDate %></li>
 			</ul>
 		</div>
 		<div class="col-md-8" id="graph-data-view">
-			<div id="lift-chart-<%=model.get("event_id")%>">
+			<div id="lift-chart-<%=model.get("username") %>-<%=model.get("provider")%>">
 				<div id="loading-chart" align="center"><img src="imgs/loader.gif"></div>
 			</div>
 		</div>

@@ -46,9 +46,9 @@ define(['jquery','underscore','backbone','text!templates/event-item.html','model
 				}
 			
 				if (that.reportLoaded) {
-					$("#liftshow-event-"+that.model.get("event_id")).text('Hide Lift')
+					$("#liftshow-user-"+that.model.get("username")+"-"+that.model.get("provider")).text('Hide Lift')
 				} else {
-					$("#liftshow-event-"+that.model.get("event_id")).text('Show Lift')
+					$("#liftshow-user-"+that.model.get("username")+"-"+that.model.get("provider")).text('Show Lift')
 				}
 
 			},
@@ -68,7 +68,7 @@ define(['jquery','underscore','backbone','text!templates/event-item.html','model
 			fetchLiftReport: function(){
 				var that = this;
 				that.lift = new liftView({model:this.model});
-				$("#lift-event-" + that.model.get("event_id")).html(that.lift.$el);
+				$("#lift-event-" + that.model.get("username")+"-"+that.model.get("provider")).html(that.lift.$el);
 			}
 		});
 
